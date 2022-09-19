@@ -74,7 +74,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\BasketItem.cs" />
+    <Compile Include="Models\Product.cs" />
     <Compile Include="Options.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -33,10 +33,10 @@
             this.btnStopCamera = new System.Windows.Forms.Button();
             this.cmbCameras = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.txtProductDescription = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.txtPrice = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.btnClose = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pctDisplay)).BeginInit();
@@ -57,7 +57,7 @@
             this.btnStartCamera.Margin = new System.Windows.Forms.Padding(2);
             this.btnStartCamera.Name = "btnStartCamera";
             this.btnStartCamera.Size = new System.Drawing.Size(107, 33);
-            this.btnStartCamera.TabIndex = 1;
+            this.btnStartCamera.TabIndex = 2;
             this.btnStartCamera.Text = "Start Camera";
             this.btnStartCamera.UseVisualStyleBackColor = true;
             this.btnStartCamera.Click += new System.EventHandler(this.btnStartCamera_Click);
@@ -68,7 +68,7 @@
             this.btnStopCamera.Margin = new System.Windows.Forms.Padding(2);
             this.btnStopCamera.Name = "btnStopCamera";
             this.btnStopCamera.Size = new System.Drawing.Size(107, 33);
-            this.btnStopCamera.TabIndex = 2;
+            this.btnStopCamera.TabIndex = 3;
             this.btnStopCamera.Text = "Stop Camera";
             this.btnStopCamera.UseVisualStyleBackColor = true;
             this.btnStopCamera.Click += new System.EventHandler(this.btnStopCamera_Click);
@@ -81,7 +81,7 @@
             this.cmbCameras.Margin = new System.Windows.Forms.Padding(2);
             this.cmbCameras.Name = "cmbCameras";
             this.cmbCameras.Size = new System.Drawing.Size(174, 21);
-            this.cmbCameras.TabIndex = 3;
+            this.cmbCameras.TabIndex = 4;
             // 
             // label1
             // 
@@ -91,14 +91,13 @@
             this.label1.Size = new System.Drawing.Size(83, 13);
             this.label1.TabIndex = 4;
             this.label1.Text = "Camera Device:";
-            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
-            // textBox1
+            // txtProductDescription
             // 
-            this.textBox1.Location = new System.Drawing.Point(122, 498);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(527, 20);
-            this.textBox1.TabIndex = 5;
+            this.txtProductDescription.Location = new System.Drawing.Point(122, 498);
+            this.txtProductDescription.Name = "txtProductDescription";
+            this.txtProductDescription.Size = new System.Drawing.Size(527, 20);
+            this.txtProductDescription.TabIndex = 0;
             // 
             // label2
             // 
@@ -118,12 +117,12 @@
             this.label3.TabIndex = 8;
             this.label3.Text = "Price:";
             // 
-            // textBox2
+            // txtPrice
             // 
-            this.textBox2.Location = new System.Drawing.Point(122, 524);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(104, 20);
-            this.textBox2.TabIndex = 7;
+            this.txtPrice.Location = new System.Drawing.Point(122, 524);
+            this.txtPrice.Name = "txtPrice";
+            this.txtPrice.Size = new System.Drawing.Size(104, 20);
+            this.txtPrice.TabIndex = 1;
             // 
             // label4
             // 
@@ -141,9 +140,10 @@
             this.btnClose.Margin = new System.Windows.Forms.Padding(2);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(107, 33);
-            this.btnClose.TabIndex = 10;
+            this.btnClose.TabIndex = 5;
             this.btnClose.Text = "Close";
             this.btnClose.UseVisualStyleBackColor = true;
+            this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
             // 
             // ProductCapture
             // 
@@ -153,9 +153,9 @@
             this.Controls.Add(this.btnClose);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
-            this.Controls.Add(this.textBox2);
+            this.Controls.Add(this.txtPrice);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.txtProductDescription);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.cmbCameras);
             this.Controls.Add(this.btnStopCamera);
@@ -169,6 +169,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "ProductCapture";
             this.Load += new System.EventHandler(this.ProductCapture_Load);
+            this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ProductCapture_KeyPress);
             ((System.ComponentModel.ISupportInitialize)(this.pctDisplay)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -182,10 +183,10 @@
         private System.Windows.Forms.Button btnStopCamera;
         private System.Windows.Forms.ComboBox cmbCameras;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox txtProductDescription;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.TextBox txtPrice;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button btnClose;
     }
