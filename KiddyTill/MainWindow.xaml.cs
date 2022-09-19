@@ -1,6 +1,8 @@
 ﻿using KiddyTill.Models;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -13,7 +15,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
+using System.Xml.Serialization;
 
 namespace KiddyTill
 {
@@ -32,8 +34,8 @@ namespace KiddyTill
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            LstBasket.ItemsSource = new List<Product> { new Product { ProductDescription = "Product 1" } };
             Initialise();
+            LstBasket.ItemsSource = _products;
         }
 
         private void Initialise()
@@ -46,7 +48,7 @@ namespace KiddyTill
                 Properties.Settings.Default.Save();
             }
 
-            System.IO.Directory.CreateDirectory(Properties.Settings.Default.ProductsDirectory);
+            Directory.CreateDirectory(Properties.Settings.Default.ProductsDirectory);
 
             LoadProducts();
         }
@@ -54,11 +56,21 @@ namespace KiddyTill
         private void LoadProducts()
         {
             var files = Directory.EnumerateFiles(Properties.Settings.Default.ProductsDirectory, "*.xml", SearchOption.TopDirectoryOnly);
-                        
-            //foreach (var f in files)
-            //{
-            //    Console.WriteLine($"{f.File}\t{f.Line}");
-            //}
+
+            foreach (var file in files)
+            {
+                var serializer = new XmlSerializer(typeof(Product));
+                using (var myFileStream = new FileStream(file, FileMode.Open))
+                {
+                    var product = (Product)serializer.Deserialize(myFileStream);
+                    using (Stream BitmapStream = File.Open(Path.Combine(System.IO.Path.GetDirectoryName(file), System.IO.Path.GetFileNameWithoutExtension(file) + ".jpg"), FileMode.Open))
+                    {
+                        var img = System.Drawing.Image.FromStream(BitmapStream);
+                        product.Image = new Bitmap(img);
+                    }
+                    _products.Add(product);
+                }
+            }
         }
 
         private void SaveProducts()
@@ -67,11 +79,14 @@ namespace KiddyTill
             {
                 System.Xml.Serialization.XmlSerializer writer = new System.Xml.Serialization.XmlSerializer(typeof(Product));
 
-                var path = Properties.Settings.Default.ProductsDirectory + "//" + product.BarCode + ".xml";
-                System.IO.FileStream file = System.IO.File.Create(path);
+                var path = Properties.Settings.Default.ProductsDirectory + "//" + product.BarCode;
+                System.IO.FileStream file = System.IO.File.Create(path + ".xml");
+
 
                 writer.Serialize(file, product);
                 file.Close();
+
+                product.Image.Save(path + ".jpg", ImageFormat.Jpeg);
             }
         }
 
