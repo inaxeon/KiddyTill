@@ -40,7 +40,8 @@ namespace Touchless.Vision.Camera
         [ImportingConstructor]
         public CameraFrameSource([Import(ExportInterfaceNames.DefaultCamera)] Camera camera)
         {
-            if (camera == null) throw new ArgumentNullException("camera");
+            if (camera == null)
+                throw new ArgumentNullException("camera");
 
             this.Camera = camera;
         }
@@ -73,7 +74,11 @@ namespace Touchless.Vision.Camera
             if (IsCapturing && this.NewFrame != null)
             {
                 var frame = new Frame(e.Image);
-                this.NewFrame(this, frame, e.CameraFps);
+                try
+                {
+                    this.NewFrame(this, frame, e.CameraFps);
+                }
+                catch { }
             }
         }
 

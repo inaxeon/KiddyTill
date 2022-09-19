@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:KiddyTill"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen">
+        Title="MainWindow" Height="450" Width="800" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen" KeyDown="Window_KeyDown">
     <Grid>
         <Grid>
             <Grid.RowDefinitions>
@@ -24,14 +24,27 @@
                     <ColumnDefinition Width="2*"/>
                     <ColumnDefinition Width="1*"/>
                 </Grid.ColumnDefinitions>
-                <StackPanel Grid.Column="0">
-                    <Image Name="ImgProduct"></Image>
-                    <Label>Product</Label>
-                </StackPanel>
-                <StackPanel Grid.Column="1">
-                    <Label>Basket</Label>
-
-                    <ListBox ItemsSource="{Binding Customers}" Name="LstBasket">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition Height="100"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Image Name="ImgProduct" Grid.Row="0"></Image>
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition></ColumnDefinition>
+                            <ColumnDefinition></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Label Name="LblProductDescription" FontSize="40" Grid.Column="0"></Label>
+                        <Label Name="LblPrice" FontSize="40" Grid.Column="1"></Label>
+                    </Grid>
+                </Grid>
+                <Grid Grid.Column="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition Height="100"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <ListBox Grid.Row="0" ItemsSource="{Binding Customers}" Name="LstBasket">
                         <ListBox.ItemContainerStyle>
                             <Style TargetType="ListBoxItem">
                                 <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
@@ -45,15 +58,23 @@
                                         <ColumnDefinition Width="1*"/>
                                     </Grid.ColumnDefinitions>
                                     <StackPanel Grid.Column="0" >
-                                        <Label Content="{Binding ProductDescription}"></Label>
-                                        <Label Content="{Binding PriceFormatted}"></Label>
+                                        <Label FontSize="20" Content="{Binding ProductDescription}"></Label>
+                                        <Label FontSize="20" Content="{Binding PriceFormatted}"></Label>
                                     </StackPanel>
                                     <Image Grid.Column="1" Source="{Binding ImageObject}" Width="128" Height="96"></Image>
                                 </Grid>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
-                </StackPanel>
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition></ColumnDefinition>
+                            <ColumnDefinition></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Row="0" FontSize="40">Total:</Label>
+                        <Label Name="LblBasketTotal" FontSize="40" Grid.Column="1"></Label>
+                    </Grid>
+                </Grid>
             </Grid>
         </Grid>
     </Grid>

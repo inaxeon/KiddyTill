@@ -131,9 +131,10 @@
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(12, 552);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(367, 13);
+            this.label4.Size = new System.Drawing.Size(438, 13);
             this.label4.TabIndex = 9;
-            this.label4.Text = "(Press F1 to start/stop webcam. Scan barcode to capture and save product)";
+            this.label4.Text = "(Press PgUp or PgDown to start/stop webcam. Scan barcode to capture and save prod" +
+    "uct)";
             // 
             // btnClose
             // 
@@ -145,7 +146,6 @@
             this.btnClose.TabIndex = 6;
             this.btnClose.Text = "Close";
             this.btnClose.UseVisualStyleBackColor = true;
-            this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
             // 
             // label5
             // 
@@ -188,6 +188,7 @@
             this.Name = "ProductCapture";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "ProductCapture";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.ProductCapture_FormClosed);
             this.Load += new System.EventHandler(this.ProductCapture_Load);
             this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ProductCapture_KeyPress);
             ((System.ComponentModel.ISupportInitialize)(this.pctDisplay)).EndInit();

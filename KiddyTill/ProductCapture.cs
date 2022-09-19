@@ -143,7 +143,7 @@ namespace KiddyTill
 
         private void ProductCapture_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (!(e.KeyChar >= '0' && e.KeyChar <= '9') || e.KeyChar == '\r')
+            if (!(char.IsDigit(e.KeyChar) || char.IsLetter(e.KeyChar)))
             {
                 e.Handled = false;
                 return;
@@ -248,11 +248,6 @@ namespace KiddyTill
             StartCamera();
         }
 
-        private void btnClose_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void btnSaveProduct_Click(object sender, EventArgs e)
         {
             Regex regex = new Regex(@"[a-zA-Z0-9]");
@@ -264,6 +259,11 @@ namespace KiddyTill
             }
 
             SaveProduct(txtBarCode.Text);
+        }
+
+        private void ProductCapture_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            DisposeCamera();
         }
     }
 }
