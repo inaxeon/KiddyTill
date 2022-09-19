@@ -6,6 +6,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Touchless.Vision.Camera;
@@ -52,11 +53,20 @@ namespace KiddyTill
             }
 
             KeyPreview = true;
+            txtProductDescription.Focus();
+            StartCamera();
         }
 
         private void btnStartCamera_Click(object sender, EventArgs e)
         {
-            StartCamera();
+            if (_frameSource == null)
+            {
+                StartCamera();
+            }
+            else
+            {
+                DisposeCamera();
+            }
         }
 
         private void StartCamera()
@@ -67,6 +77,7 @@ namespace KiddyTill
 
             DisposeCamera();
             StartCapturing();
+            btnStartCamera.Text = "Stop Camera";
         }
 
         private void StartCapturing()
@@ -126,11 +137,8 @@ namespace KiddyTill
 
             if (_latestFrame != null)
                 pctDisplay.Image = _latestFrame;
-        }
 
-        private void btnStopCamera_Click(object sender, EventArgs e)
-        {
-            DisposeCamera();
+            btnStartCamera.Text = "Start Camera";
         }
 
         private void ProductCapture_KeyPress(object sender, KeyPressEventArgs e)
@@ -158,7 +166,7 @@ namespace KiddyTill
                 if (_keyTimer.Enabled)
                     return true; // Reading from barcode scanner
             }
-            if (keyData == Keys.Space)
+            if (keyData == Keys.PageDown || keyData == Keys.PageUp)
             {
                 if (_frameSource == null)
                     StartCamera();
@@ -200,6 +208,9 @@ namespace KiddyTill
         private void SaveProduct(string barCode)
         {
             decimal price;
+
+            barCode = barCode.ToUpperInvariant();
+
             if (string.IsNullOrEmpty(txtProductDescription.Text))
             {
                 MessageBox.Show("No product description entered. Product not saved.", "Missing input", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -227,18 +238,32 @@ namespace KiddyTill
             };
 
             _products.RemoveAll(p => p.BarCode == barCode);
-
             _products.Add(newProduct);
 
             pctDisplay.Image = null;
             txtProductDescription.Text = "";
             txtPrice.Text = "";
+            txtBarCode.Text = "";
             txtProductDescription.Focus();
+            StartCamera();
         }
 
         private void btnClose_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void btnSaveProduct_Click(object sender, EventArgs e)
+        {
+            Regex regex = new Regex(@"[a-zA-Z0-9]");
+
+            if (!regex.IsMatch(txtBarCode.Text))
+            {
+                MessageBox.Show("Invalid barcode. Product not saved.", "Missing input", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            SaveProduct(txtBarCode.Text);
         }
     }
 }

@@ -51,6 +51,7 @@ namespace KiddyTill
             Directory.CreateDirectory(Properties.Settings.Default.ProductsDirectory);
 
             LoadProducts();
+
         }
 
         private void LoadProducts()
