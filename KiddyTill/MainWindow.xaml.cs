@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -28,7 +29,7 @@ namespace KiddyTill
     public partial class MainWindow : Window
     {
         private List<Product> _products;
-        private ObservableCollection<Product> _basket;
+        private ObservableCollection<BasketItem> _basket;
         private DispatcherTimer _keyTimer;
         private List<char> _keyCodes;
 
@@ -36,7 +37,7 @@ namespace KiddyTill
         {
             InitializeComponent();
             _products = new List<Product>();
-            _basket = new ObservableCollection<Product>();
+            _basket = new ObservableCollection<BasketItem>();
             _keyTimer = new DispatcherTimer();
             _keyTimer.Tick += new EventHandler(BarcodeScannerInputEentTimer);
             _keyTimer.Interval = new TimeSpan(0, 0, 0, 0, 20);
@@ -47,6 +48,14 @@ namespace KiddyTill
         {
             Initialise();
             LstBasket.ItemsSource = _basket;
+
+            ((INotifyCollectionChanged)LstBasket.ItemsSource).CollectionChanged += (s, evt) =>
+            {
+                if (evt.Action == NotifyCollectionChangedAction.Add)
+                {
+                    LstBasket.ScrollIntoView(LstBasket.Items[LstBasket.Items.Count - 1]);
+                }
+            };
         }
 
         private void Initialise()
@@ -75,7 +84,7 @@ namespace KiddyTill
                 using (var myFileStream = new FileStream(file, FileMode.Open))
                 {
                     var product = (Product)serializer.Deserialize(myFileStream);
-                    using (Stream BitmapStream = File.Open(Path.Combine(Path.GetDirectoryName(file), Path.GetFileNameWithoutExtension(file) + ".png"), FileMode.Open))
+                    using (Stream BitmapStream = File.Open(Path.Combine(Path.GetDirectoryName(file), Path.GetFileNameWithoutExtension(file) + ".jpg"), FileMode.Open))
                     {
                         var img = System.Drawing.Image.FromStream(BitmapStream);
                         product.Image = new Bitmap(img);
@@ -100,7 +109,7 @@ namespace KiddyTill
                 writer.Serialize(file, product);
                 file.Close();
 
-                product.Image.Save(path + ".png", ImageFormat.Png);
+                product.Image.Save(path + ".jpg", ImageFormat.Jpeg);
                 product.AddedOrModified = false; // Don't serialise again
             }
         }
@@ -158,9 +167,9 @@ namespace KiddyTill
             LblPrice.Content = product.PriceFormatted;
             ImgProduct.Source = product.WpfBitmap;
 
-            _basket.Add(product);
+            _basket.Add(new BasketItem { Product = product });
 
-            LblBasketTotal.Content = _basket.Select(b => b.Price).Aggregate((a, b) => a + b).ToString("C");
+            LblBasketTotal.Content = _basket.Select(b => b.Product.Price).Aggregate((a, b) => a + b).ToString("C");
         }
 
         public string GetResourcePath(string fileName)
@@ -169,6 +178,16 @@ namespace KiddyTill
             UriBuilder uri = new UriBuilder(codeBase);
             string path = Uri.UnescapeDataString(uri.Path);
             return Path.Combine(Path.GetDirectoryName(path), "Resources", fileName);
+        }
+
+        private void CmdOptions_Click(object sender, RoutedEventArgs e)
+        {
+            var optionsDialog = new Options();
+            if (optionsDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                _products.Clear();
+                LoadProducts();
+            }
         }
     }
 }

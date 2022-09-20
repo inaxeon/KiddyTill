@@ -17,6 +17,7 @@
                 </MenuItem>
                 <MenuItem Header="_Tools">
                     <MenuItem Header="_Capture Products..." Name="CmdCaptureProducts" Click="CmdCaptureProducts_Click"  />
+                    <MenuItem Header="_Options..." Name="CmdOptions" Click="CmdOptions_Click"  />
                 </MenuItem>
             </Menu>
             <Grid Grid.Row="1">
@@ -41,7 +42,7 @@
                 </Grid>
                 <Grid Grid.Column="1">
                     <Grid.RowDefinitions>
-                        <RowDefinition></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
                         <RowDefinition Height="100"></RowDefinition>
                     </Grid.RowDefinitions>
                     <ListBox Grid.Row="0" ItemsSource="{Binding Customers}" Name="LstBasket">
@@ -58,10 +59,10 @@
                                         <ColumnDefinition Width="1*"/>
                                     </Grid.ColumnDefinitions>
                                     <StackPanel Grid.Column="0" >
-                                        <Label FontSize="20" Content="{Binding ProductDescription}"></Label>
-                                        <Label FontSize="20" Content="{Binding PriceFormatted}"></Label>
+                                        <Label FontSize="20" Content="{Binding Product.ProductDescription}"></Label>
+                                        <Label FontSize="20" Content="{Binding Product.PriceFormatted}"></Label>
                                     </StackPanel>
-                                    <Image Grid.Column="1" Source="{Binding WpfBitmap}" Width="128" Height="96"></Image>
+                                    <Image Grid.Column="1" Source="{Binding Product.WpfBitmap}" Width="128" Height="96"></Image>
                                 </Grid>
                             </DataTemplate>
                         </ListBox.ItemTemplate>

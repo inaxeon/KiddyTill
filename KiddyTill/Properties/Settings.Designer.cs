@@ -34,5 +34,17 @@ namespace KiddyTill.Properties {
                 this["ProductsDirectory"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool FlipCameraPreview {
+            get {
+                return ((bool)(this["FlipCameraPreview"]));
+            }
+            set {
+                this["FlipCameraPreview"] = value;
+            }
+        }
     }
 }

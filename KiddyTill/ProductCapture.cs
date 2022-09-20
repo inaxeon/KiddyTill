@@ -52,6 +52,8 @@ namespace KiddyTill
                     cmbCameras.SelectedIndex = 0;
             }
 
+            chkMirrorImage.Checked = Properties.Settings.Default.FlipCameraPreview;
+
             KeyPreview = true;
             txtProductDescription.Focus();
             StartCamera();
@@ -269,6 +271,11 @@ namespace KiddyTill
         private void ProductCapture_FormClosed(object sender, FormClosedEventArgs e)
         {
             DisposeCamera();
+        }
+
+        private void chkMirrorImage_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.FlipCameraPreview = chkMirrorImage.Checked;
         }
     }
 }
