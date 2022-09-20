@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -89,8 +90,10 @@ namespace KiddyTill
         {
             foreach (var product in _products)
             {
-                var writer = new XmlSerializer(typeof(Product));
+                if (!product.AddedOrModified)
+                    continue;
 
+                var writer = new XmlSerializer(typeof(Product));
                 var path = Properties.Settings.Default.ProductsDirectory + "//" + product.BarCode;
                 var file = File.Create(path + ".xml");
 
@@ -98,6 +101,7 @@ namespace KiddyTill
                 file.Close();
 
                 product.Image.Save(path + ".png", ImageFormat.Png);
+                product.AddedOrModified = false; // Don't serialise again
             }
         }
 
@@ -146,17 +150,25 @@ namespace KiddyTill
             {
                 LblProductDescription.Content = "Product not found";
                 LblPrice.Content = null;
-                ImgProduct.Source = null;
+                ImgProduct.Source = new BitmapImage(new Uri(GetResourcePath("NoProduct.png")));
                 return;
             }
 
             LblProductDescription.Content = product.ProductDescription;
             LblPrice.Content = product.PriceFormatted;
-            ImgProduct.Source = product.ImageObject;
+            ImgProduct.Source = product.WpfBitmap;
 
             _basket.Add(product);
 
             LblBasketTotal.Content = _basket.Select(b => b.Price).Aggregate((a, b) => a + b).ToString("C");
+        }
+
+        public string GetResourcePath(string fileName)
+        {
+            string codeBase = Assembly.GetExecutingAssembly().CodeBase;
+            UriBuilder uri = new UriBuilder(codeBase);
+            string path = Uri.UnescapeDataString(uri.Path);
+            return Path.Combine(Path.GetDirectoryName(path), "Resources", fileName);
         }
     }
 }

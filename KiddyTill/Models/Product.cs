@@ -19,13 +19,16 @@ namespace KiddyTill.Models
         public decimal Price { get; set; }
 
         [XmlIgnore]
+        public bool AddedOrModified { get; set; }
+
+        [XmlIgnore]
         public string PriceFormatted { get { return Price.ToString("C"); } }
 
         [XmlIgnore]
         public Bitmap Image { get; set; }
 
         [XmlIgnore]
-        public BitmapImage ImageObject { get { return Convert(Image); } }
+        public BitmapImage WpfBitmap { get { return Convert(Image); } }
 
         private BitmapImage Convert(Bitmap src)
         {

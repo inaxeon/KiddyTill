@@ -76,6 +76,7 @@ namespace KiddyTill
                 return;
 
             DisposeCamera();
+            _latestFrame = null;
             StartCapturing();
             btnStartCamera.Text = "Stop Camera";
         }
@@ -105,8 +106,12 @@ namespace KiddyTill
         {
             if (_latestFrame != null)
             {
-                // Draw the latest image from the active camera
-                e.Graphics.DrawImage(_latestFrame, 0, 0, _latestFrame.Width, _latestFrame.Height);
+                var thisFrame = new Bitmap(_latestFrame);
+
+                if (chkMirrorImage.Checked)
+                    thisFrame.RotateFlip(RotateFlipType.Rotate180FlipY);
+
+                e.Graphics.DrawImage(thisFrame, 0, 0, thisFrame.Width, thisFrame.Height);
             }
         }
 
@@ -233,13 +238,13 @@ namespace KiddyTill
             {
                 Price = price,
                 ProductDescription = txtProductDescription.Text,
-                Image = (Bitmap)pctDisplay.Image,
-                BarCode = barCode
+                Image = _latestFrame,
+                BarCode = barCode,
+                AddedOrModified = true,
             };
 
             _products.RemoveAll(p => p.BarCode == barCode);
             _products.Add(newProduct);
-
             pctDisplay.Image = null;
             txtProductDescription.Text = "";
             txtPrice.Text = "";

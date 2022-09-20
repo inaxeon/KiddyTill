@@ -41,6 +41,7 @@
             this.btnClose = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
             this.txtBarCode = new System.Windows.Forms.TextBox();
+            this.chkMirrorImage = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.pctDisplay)).BeginInit();
             this.SuspendLayout();
             // 
@@ -59,7 +60,7 @@
             this.btnStartCamera.Margin = new System.Windows.Forms.Padding(2);
             this.btnStartCamera.Name = "btnStartCamera";
             this.btnStartCamera.Size = new System.Drawing.Size(107, 33);
-            this.btnStartCamera.TabIndex = 3;
+            this.btnStartCamera.TabIndex = 4;
             this.btnStartCamera.Text = "Start Camera";
             this.btnStartCamera.UseVisualStyleBackColor = true;
             this.btnStartCamera.Click += new System.EventHandler(this.btnStartCamera_Click);
@@ -70,7 +71,7 @@
             this.btnSaveProduct.Margin = new System.Windows.Forms.Padding(2);
             this.btnSaveProduct.Name = "btnSaveProduct";
             this.btnSaveProduct.Size = new System.Drawing.Size(107, 33);
-            this.btnSaveProduct.TabIndex = 4;
+            this.btnSaveProduct.TabIndex = 5;
             this.btnSaveProduct.Text = "Save Product";
             this.btnSaveProduct.UseVisualStyleBackColor = true;
             this.btnSaveProduct.Click += new System.EventHandler(this.btnSaveProduct_Click);
@@ -83,7 +84,7 @@
             this.cmbCameras.Margin = new System.Windows.Forms.Padding(2);
             this.cmbCameras.Name = "cmbCameras";
             this.cmbCameras.Size = new System.Drawing.Size(174, 21);
-            this.cmbCameras.TabIndex = 5;
+            this.cmbCameras.TabIndex = 6;
             // 
             // label1
             // 
@@ -143,7 +144,7 @@
             this.btnClose.Margin = new System.Windows.Forms.Padding(2);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(107, 33);
-            this.btnClose.TabIndex = 6;
+            this.btnClose.TabIndex = 7;
             this.btnClose.Text = "Close";
             this.btnClose.UseVisualStyleBackColor = true;
             // 
@@ -163,11 +164,22 @@
             this.txtBarCode.Size = new System.Drawing.Size(288, 20);
             this.txtBarCode.TabIndex = 2;
             // 
+            // chkMirrorImage
+            // 
+            this.chkMirrorImage.AutoSize = true;
+            this.chkMirrorImage.Location = new System.Drawing.Point(544, 551);
+            this.chkMirrorImage.Name = "chkMirrorImage";
+            this.chkMirrorImage.Size = new System.Drawing.Size(83, 17);
+            this.chkMirrorImage.TabIndex = 3;
+            this.chkMirrorImage.Text = "Mirror image";
+            this.chkMirrorImage.UseVisualStyleBackColor = true;
+            // 
             // ProductCapture
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(659, 622);
+            this.Controls.Add(this.chkMirrorImage);
             this.Controls.Add(this.txtBarCode);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.btnClose);
@@ -212,5 +224,6 @@
         private System.Windows.Forms.Button btnClose;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox txtBarCode;
+        private System.Windows.Forms.CheckBox chkMirrorImage;
     }
 }

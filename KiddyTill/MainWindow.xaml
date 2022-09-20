@@ -61,7 +61,7 @@
                                         <Label FontSize="20" Content="{Binding ProductDescription}"></Label>
                                         <Label FontSize="20" Content="{Binding PriceFormatted}"></Label>
                                     </StackPanel>
-                                    <Image Grid.Column="1" Source="{Binding ImageObject}" Width="128" Height="96"></Image>
+                                    <Image Grid.Column="1" Source="{Binding WpfBitmap}" Width="128" Height="96"></Image>
                                 </Grid>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
