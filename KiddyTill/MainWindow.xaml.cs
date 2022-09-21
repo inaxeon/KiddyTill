@@ -47,7 +47,7 @@ namespace KiddyTill
             _noProduct = new Product
             {
                 ProductDescription = "Product not found",
-                Image = new Bitmap(GetResourcePath("NoProduct.png"))
+                Image = new BitmapImage(new Uri(GetResourcePath("NoProduct.png")))
             };
         }
 
@@ -133,11 +133,8 @@ namespace KiddyTill
                 using (var myFileStream = new FileStream(file, FileMode.Open))
                 {
                     var product = (Product)serializer.Deserialize(myFileStream);
-                    using (Stream BitmapStream = File.Open(Path.Combine(Path.GetDirectoryName(file), Path.GetFileNameWithoutExtension(file) + ".jpg"), FileMode.Open))
-                    {
-                        var img = System.Drawing.Image.FromStream(BitmapStream);
-                        product.Image = new Bitmap(img);
-                    }
+                    var imageFileName = Path.Combine(Path.GetDirectoryName(file), Path.GetFileNameWithoutExtension(file) + ".jpg");
+                    product.Image = new BitmapImage(new Uri(imageFileName));
 
                     _products.Add(product);
                 }
@@ -158,7 +155,14 @@ namespace KiddyTill
                 writer.Serialize(file, product);
                 file.Close();
 
-                product.Image.Save(path + ".jpg", ImageFormat.Jpeg);
+                BitmapEncoder encoder = new JpegBitmapEncoder();
+                encoder.Frames.Add(BitmapFrame.Create(product.Image));
+
+                using (var fileStream = new System.IO.FileStream(path + ".jpg", FileMode.Create))
+                {
+                    encoder.Save(fileStream);
+                }
+
                 product.AddedOrModified = false; // Don't serialise again
             }
         }
@@ -213,7 +217,7 @@ namespace KiddyTill
 
             LblProductDescription.Content = product.ProductDescription;
             LblPrice.Content = product.PriceFormatted;
-            ImgProduct.Source = product.WpfBitmap;
+            ImgProduct.Source = product.Image;
         }
 
         private void UpdateDisplay()

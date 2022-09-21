@@ -25,21 +25,18 @@ namespace KiddyTill.Models
         public string PriceFormatted { get { return Price.ToString("C"); } }
 
         [XmlIgnore]
-        public Bitmap Image { get; set; }
+        public BitmapImage Image { get; set; }
 
-        [XmlIgnore]
-        public BitmapImage WpfBitmap { get { return Convert(Image); } }
-
-        private BitmapImage Convert(Bitmap src)
+        public void SetBitmap(Bitmap src)
         {
-            MemoryStream ms = new MemoryStream();
-            ((System.Drawing.Bitmap)src).Save(ms, System.Drawing.Imaging.ImageFormat.Bmp);
+            var ms = new MemoryStream();
+            src.Save(ms, ImageFormat.Bmp);
             BitmapImage image = new BitmapImage();
             image.BeginInit();
             ms.Seek(0, SeekOrigin.Begin);
             image.StreamSource = ms;
             image.EndInit();
-            return image;
+            Image = image;
         }
     }
 }

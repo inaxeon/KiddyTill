@@ -240,10 +240,11 @@ namespace KiddyTill
             {
                 Price = price,
                 ProductDescription = txtProductDescription.Text,
-                Image = _latestFrame,
                 BarCode = barCode,
                 AddedOrModified = true,
             };
+
+            newProduct.SetBitmap(_latestFrame);
 
             _products.RemoveAll(p => p.BarCode == barCode);
             _products.Add(newProduct);
