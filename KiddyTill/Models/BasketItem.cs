@@ -9,5 +9,7 @@ namespace KiddyTill.Models
     public class BasketItem
     {
         public Product Product { get; set; }
+
+        public string PriceFormatted { get { return Product.Price.ToString("C"); } }
     }
 }

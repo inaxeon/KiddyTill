@@ -15,14 +15,11 @@ namespace KiddyTill.Models
     public class Product
     {
         public string BarCode { get; set; }
-        public string ProductDescription { get; set; }
+        public string Description { get; set; }
         public decimal Price { get; set; }
 
         [XmlIgnore]
         public bool AddedOrModified { get; set; }
-
-        [XmlIgnore]
-        public string PriceFormatted { get { return Price.ToString("C"); } }
 
         [XmlIgnore]
         public BitmapImage Image { get; set; }

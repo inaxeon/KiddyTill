@@ -59,8 +59,8 @@
                                         <ColumnDefinition Width="1*"/>
                                     </Grid.ColumnDefinitions>
                                     <StackPanel Grid.Column="0" >
-                                        <Label FontSize="20" Content="{Binding Product.ProductDescription}"></Label>
-                                        <Label FontSize="20" Content="{Binding Product.PriceFormatted}"></Label>
+                                        <Label FontSize="20" Content="{Binding Product.Description}"></Label>
+                                        <Label FontSize="20" Content="{Binding PriceFormatted}"></Label>
                                     </StackPanel>
                                     <Image Grid.Column="1" Source="{Binding Product.Image}" Width="128" Height="96"></Image>
                                 </Grid>

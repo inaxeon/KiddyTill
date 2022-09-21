@@ -239,7 +239,7 @@ namespace KiddyTill
             var newProduct = new Product
             {
                 Price = price,
-                ProductDescription = txtProductDescription.Text,
+                Description = txtProductDescription.Text,
                 BarCode = barCode,
                 AddedOrModified = true,
             };

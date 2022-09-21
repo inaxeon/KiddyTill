@@ -29,7 +29,7 @@ namespace KiddyTill
     public partial class MainWindow : Window
     {
         private List<Product> _products;
-        private Product _noProduct;
+        private BasketItem _noProduct;
         private ObservableCollection<BasketItem> _basket;
         private DispatcherTimer _keyTimer;
         private List<char> _keyCodes;
@@ -44,10 +44,13 @@ namespace KiddyTill
             _keyTimer.Tick += new EventHandler(BarcodeScannerInputEentTimer);
             _keyTimer.Interval = new TimeSpan(0, 0, 0, 0, 20);
             _keyCodes = new List<char>();
-            _noProduct = new Product
+            _noProduct = new BasketItem
             {
-                ProductDescription = "Product not found",
-                Image = new BitmapImage(new Uri(GetResourcePath("NoProduct.png")))
+                Product = new Product
+                {
+                    Description = "Product not found",
+                    Image = new BitmapImage(new Uri(GetResourcePath("NoProduct.png")))
+                }
             };
         }
 
@@ -189,9 +192,10 @@ namespace KiddyTill
                 return;
             }
 
-            _basket.Add(new BasketItem { Product = product });
+            var basketItem = new BasketItem { Product = product };
+            _basket.Add(basketItem);
             _total = _basket.Select(b => b.Product.Price).Aggregate((a, b) => a + b);
-            SetProduct(product);
+            SetProduct(basketItem);
             UpdateDisplay();
         }
 
@@ -205,7 +209,7 @@ namespace KiddyTill
 
 
 
-        private void SetProduct(Product product)
+        private void SetProduct(BasketItem product)
         {
             if (product == null)
             {
@@ -215,9 +219,9 @@ namespace KiddyTill
                 return;
             }
 
-            LblProductDescription.Content = product.ProductDescription;
+            LblProductDescription.Content = product.Product.Description;
             LblPrice.Content = product.PriceFormatted;
-            ImgProduct.Source = product.Image;
+            ImgProduct.Source = product.Product.Image;
         }
 
         private void UpdateDisplay()
