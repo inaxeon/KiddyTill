@@ -271,11 +271,12 @@ namespace KiddyTill
         private void ProductCapture_FormClosed(object sender, FormClosedEventArgs e)
         {
             DisposeCamera();
-        }
 
-        private void chkMirrorImage_CheckedChanged(object sender, EventArgs e)
-        {
-            Properties.Settings.Default.FlipCameraPreview = chkMirrorImage.Checked;
+            if (DialogResult == DialogResult.OK)
+            {
+                Properties.Settings.Default.FlipCameraPreview = chkMirrorImage.Checked;
+                Properties.Settings.Default.Save();
+            }
         }
     }
 }

@@ -68,7 +68,7 @@
             this.btnClose.Location = new System.Drawing.Point(315, 237);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(127, 32);
-            this.btnClose.TabIndex = 2;
+            this.btnClose.TabIndex = 3;
             this.btnClose.Text = "OK";
             this.btnClose.UseVisualStyleBackColor = true;
             // 
@@ -78,7 +78,7 @@
             this.btnCancel.Location = new System.Drawing.Point(182, 237);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(127, 32);
-            this.btnCancel.TabIndex = 3;
+            this.btnCancel.TabIndex = 2;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
             // 

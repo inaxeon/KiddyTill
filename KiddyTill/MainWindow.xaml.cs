@@ -29,9 +29,11 @@ namespace KiddyTill
     public partial class MainWindow : Window
     {
         private List<Product> _products;
+        private Product _noProduct;
         private ObservableCollection<BasketItem> _basket;
         private DispatcherTimer _keyTimer;
         private List<char> _keyCodes;
+        private decimal _total;
 
         public MainWindow()
         {
@@ -42,6 +44,11 @@ namespace KiddyTill
             _keyTimer.Tick += new EventHandler(BarcodeScannerInputEentTimer);
             _keyTimer.Interval = new TimeSpan(0, 0, 0, 0, 20);
             _keyCodes = new List<char>();
+            _noProduct = new Product
+            {
+                ProductDescription = "Product not found",
+                Image = new Bitmap(GetResourcePath("NoProduct.png"))
+            };
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -58,6 +65,48 @@ namespace KiddyTill
             };
         }
 
+        private void Window_KeyDown(object sender, KeyEventArgs e)
+        {
+            var key = (char)KeyInterop.VirtualKeyFromKey(e.Key);
+
+            if (!(char.IsDigit(key) || char.IsLetter(key)))
+            {
+                e.Handled = false;
+                return;
+            }
+
+            _keyCodes.Add(key);
+
+            e.Handled = true;
+
+            if (_keyTimer.IsEnabled)
+                _keyTimer.Stop();
+
+            _keyTimer.Start();
+        }
+
+        private void CmdOptions_Click(object sender, RoutedEventArgs e)
+        {
+            var optionsDialog = new Options();
+            if (optionsDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                _products.Clear();
+                LoadProducts();
+            }
+        }
+
+        private void CmdCaptureProducts_Click(object sender, RoutedEventArgs e)
+        {
+            var captureDialog = new ProductCapture(_products);
+            captureDialog.ShowDialog();
+            SaveProducts();
+        }
+
+        private void BtnNewSale_Click(object sender, RoutedEventArgs e)
+        {
+            NewSale();
+        }
+
         private void Initialise()
         {
             if (string.IsNullOrEmpty(Properties.Settings.Default.ProductsDirectory))
@@ -71,7 +120,7 @@ namespace KiddyTill
             Directory.CreateDirectory(Properties.Settings.Default.ProductsDirectory);
 
             LoadProducts();
-
+            UpdateDisplay();
         }
 
         private void LoadProducts()
@@ -114,32 +163,7 @@ namespace KiddyTill
             }
         }
 
-        private void CmdCaptureProducts_Click(object sender, RoutedEventArgs e)
-        {
-            var captureDialog = new ProductCapture(_products);
-            captureDialog.ShowDialog();
-            SaveProducts();
-        }
 
-        private void Window_KeyDown(object sender, KeyEventArgs e)
-        {
-            var key = (char)KeyInterop.VirtualKeyFromKey(e.Key);
-
-            if (!(char.IsDigit(key) || char.IsLetter(key)))
-            {
-                e.Handled = false;
-                return;
-            }
-
-            _keyCodes.Add(key);
-
-            e.Handled = true;
-
-            if (_keyTimer.IsEnabled)
-                _keyTimer.Stop();
-
-            _keyTimer.Start();
-        }
 
         private void BarcodeScannerInputEentTimer(object sender, EventArgs e)
         {
@@ -157,19 +181,14 @@ namespace KiddyTill
 
             if (product == null)
             {
-                LblProductDescription.Content = "Product not found";
-                LblPrice.Content = null;
-                ImgProduct.Source = new BitmapImage(new Uri(GetResourcePath("NoProduct.png")));
+                SetProduct(_noProduct);
                 return;
             }
 
-            LblProductDescription.Content = product.ProductDescription;
-            LblPrice.Content = product.PriceFormatted;
-            ImgProduct.Source = product.WpfBitmap;
-
             _basket.Add(new BasketItem { Product = product });
-
-            LblBasketTotal.Content = _basket.Select(b => b.Product.Price).Aggregate((a, b) => a + b).ToString("C");
+            _total = _basket.Select(b => b.Product.Price).Aggregate((a, b) => a + b);
+            SetProduct(product);
+            UpdateDisplay();
         }
 
         public string GetResourcePath(string fileName)
@@ -180,14 +199,39 @@ namespace KiddyTill
             return Path.Combine(Path.GetDirectoryName(path), "Resources", fileName);
         }
 
-        private void CmdOptions_Click(object sender, RoutedEventArgs e)
+
+
+        private void SetProduct(Product product)
         {
-            var optionsDialog = new Options();
-            if (optionsDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            if (product == null)
             {
-                _products.Clear();
-                LoadProducts();
+                ImgProduct.Source = null;
+                LblProductDescription.Content = null;
+                LblPrice.Content = null;
+                return;
             }
+
+            LblProductDescription.Content = product.ProductDescription;
+            LblPrice.Content = product.PriceFormatted;
+            ImgProduct.Source = product.WpfBitmap;
+        }
+
+        private void UpdateDisplay()
+        {
+            LblBasketTotal.Content = _total.ToString("C");
+        }
+
+        private void NewSale()
+        {
+            _basket.Clear();
+            SetProduct(null);
+            UpdateDisplay();
+        }
+
+        private void Window_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.PageDown || e.Key == Key.PageUp)
+                NewSale();
         }
     }
 }
