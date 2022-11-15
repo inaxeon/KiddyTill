@@ -52,10 +52,6 @@ namespace KiddyTill
             }
         }
 
-        private void ddlBarcodeScanner_SelectedIndexChanged(object sender, EventArgs e)
-        {
-        }
-
         private void SelectComPort()
         {
             if (string.IsNullOrEmpty(Properties.Settings.Default.SerialPort))

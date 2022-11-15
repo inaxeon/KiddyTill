@@ -48,7 +48,7 @@
             // pctDisplay
             // 
             this.pctDisplay.Location = new System.Drawing.Point(9, 8);
-            this.pctDisplay.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.pctDisplay.Margin = new System.Windows.Forms.Padding(2);
             this.pctDisplay.Name = "pctDisplay";
             this.pctDisplay.Size = new System.Drawing.Size(640, 480);
             this.pctDisplay.TabIndex = 0;
@@ -57,7 +57,7 @@
             // btnStartCamera
             // 
             this.btnStartCamera.Location = new System.Drawing.Point(9, 578);
-            this.btnStartCamera.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnStartCamera.Margin = new System.Windows.Forms.Padding(2);
             this.btnStartCamera.Name = "btnStartCamera";
             this.btnStartCamera.Size = new System.Drawing.Size(107, 33);
             this.btnStartCamera.TabIndex = 4;
@@ -68,7 +68,7 @@
             // btnSaveProduct
             // 
             this.btnSaveProduct.Location = new System.Drawing.Point(122, 578);
-            this.btnSaveProduct.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnSaveProduct.Margin = new System.Windows.Forms.Padding(2);
             this.btnSaveProduct.Name = "btnSaveProduct";
             this.btnSaveProduct.Size = new System.Drawing.Size(107, 33);
             this.btnSaveProduct.TabIndex = 5;
@@ -81,7 +81,7 @@
             this.cmbCameras.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbCameras.FormattingEnabled = true;
             this.cmbCameras.Location = new System.Drawing.Point(327, 584);
-            this.cmbCameras.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.cmbCameras.Margin = new System.Windows.Forms.Padding(2);
             this.cmbCameras.Name = "cmbCameras";
             this.cmbCameras.Size = new System.Drawing.Size(174, 21);
             this.cmbCameras.TabIndex = 6;
@@ -141,7 +141,7 @@
             // 
             this.btnClose.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.btnClose.Location = new System.Drawing.Point(542, 577);
-            this.btnClose.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnClose.Margin = new System.Windows.Forms.Padding(2);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(107, 33);
             this.btnClose.TabIndex = 7;
@@ -163,6 +163,7 @@
             this.txtBarCode.Name = "txtBarCode";
             this.txtBarCode.Size = new System.Drawing.Size(288, 20);
             this.txtBarCode.TabIndex = 2;
+            this.txtBarCode.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtBarCode_KeyPress);
             // 
             // chkMirrorImage
             // 
@@ -194,7 +195,7 @@
             this.Controls.Add(this.btnStartCamera);
             this.Controls.Add(this.pctDisplay);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "ProductCapture";

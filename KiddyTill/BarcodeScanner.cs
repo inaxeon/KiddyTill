@@ -12,6 +12,7 @@ namespace KiddyTill
     {
         private string _serialPort;
         private SerialPort _port;
+        public bool IsOpen { get { return _port != null && _port.IsOpen; } }
 
         public delegate void BarcodeScannedCallback(string barcode);
         public event BarcodeScannedCallback BarcodeScanned;
@@ -30,7 +31,7 @@ namespace KiddyTill
             _port.Handshake = Handshake.None;
             _port.DataBits = 8;
             _port.StopBits = StopBits.One;
-            _port.ReadTimeout = 1000;
+            _port.ReadTimeout = 500;
             _port.DataReceived += Port_DataReceived;
 
             _port.Open();
@@ -49,16 +50,16 @@ namespace KiddyTill
 
         private string ReadBarcode()
         {
-            byte[] buffer = new byte[256];
-            bool reading = true;
+            const int maxBarcode = 256;
+            byte[] buffer = new byte[maxBarcode];
             int total = 0;
+
             while (true)
             {
                 try
                 {
-                    int read = _port.Read(buffer, total, 256);
+                    int read = _port.Read(buffer, total, maxBarcode);
                     total += read;
-
                     if (buffer[total - 1] == '\n' || buffer[total - 1] == '\r')
                         break;
                 }
@@ -72,7 +73,10 @@ namespace KiddyTill
                 }
             }
 
-            return Encoding.ASCII.GetString(buffer.Take(total - 2).ToArray());
+            if (total > 1) // At least one digit + LF. Remove LF. Don't want it.
+                return Encoding.ASCII.GetString(buffer.Take(total - 2).ToArray());
+
+            return ""; // Shouldn't happen.
         }
     }
 }

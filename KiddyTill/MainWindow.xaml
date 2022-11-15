@@ -14,6 +14,8 @@
             </Grid.RowDefinitions>
             <Menu Grid.Row="0" Name="MainMenu">
                 <MenuItem Header="_File">
+                    <MenuItem Header="E_xit" Name="CmdExit" Click="CmdExit_Click"  />
+
                 </MenuItem>
                 <MenuItem Header="_Tools">
                     <MenuItem Header="_Capture Products..." Name="CmdCaptureProducts" Click="CmdCaptureProducts_Click"  />

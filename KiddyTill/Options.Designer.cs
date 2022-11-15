@@ -92,7 +92,6 @@
             this.ddlBarcodeScanner.Name = "ddlBarcodeScanner";
             this.ddlBarcodeScanner.Size = new System.Drawing.Size(429, 21);
             this.ddlBarcodeScanner.TabIndex = 4;
-            this.ddlBarcodeScanner.SelectedIndexChanged += new System.EventHandler(this.ddlBarcodeScanner_SelectedIndexChanged);
             // 
             // label1
             // 
@@ -105,8 +104,10 @@
             // 
             // Options
             // 
+            this.AcceptButton = this.btnClose;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.CancelButton = this.btnCancel;
             this.ClientSize = new System.Drawing.Size(454, 281);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.ddlBarcodeScanner);

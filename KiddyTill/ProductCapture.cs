@@ -54,12 +54,16 @@ namespace KiddyTill
             txtProductDescription.Focus();
             StartCamera();
 
-            _scanner.BarcodeScanned += Scanner_BarcodeScanned;
+            if (_scanner != null)
+                _scanner.BarcodeScanned += Scanner_BarcodeScanned;
         }
 
         private void Scanner_BarcodeScanned(string barcode)
         {
-            throw new NotImplementedException();
+            if (InvokeRequired)
+            {
+                BeginInvoke((Action)(() => { SaveProduct(barcode); }));
+            }
         }
 
         private void btnStartCamera_Click(object sender, EventArgs e)
@@ -217,6 +221,27 @@ namespace KiddyTill
                 Properties.Settings.Default.FlipCameraPreview = chkMirrorImage.Checked;
                 Properties.Settings.Default.Save();
             }
+        }
+
+        private void txtBarCode_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)Keys.Return)
+                SaveProduct(txtBarCode.Text);
+        }
+
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            if (keyData == Keys.PageDown || keyData == Keys.PageUp)
+            {
+                if (_frameSource == null)
+                    StartCamera();
+                else
+                    DisposeCamera();
+
+                return true;
+            }
+
+            return base.ProcessCmdKey(ref msg, keyData);
         }
     }
 }

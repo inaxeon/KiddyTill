@@ -70,26 +70,31 @@ namespace KiddyTill
             {
                 _products.Clear();
                 LoadProducts();
+                OpenScanner();
             }
         }
 
         private void CmdCaptureProducts_Click(object sender, RoutedEventArgs e)
         {
-            if (_scanner != null)
-            {
-                var captureDialog = new ProductCapture(_scanner, _products);
-                captureDialog.ShowDialog();
-                SaveProducts();
-            }
-            else
-            {
-                MessageBox.Show("No Barcode scanner connected", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+            var captureDialog = new ProductCapture(_scanner, _products);
+            captureDialog.ShowDialog();
+            SaveProducts();
+        }
+
+        private void CmdExit_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
         }
 
         private void BtnNewSale_Click(object sender, RoutedEventArgs e)
         {
             NewSale();
+        }
+
+        private void Window_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.PageDown || e.Key == Key.PageUp)
+                NewSale();
         }
 
         private void Initialise()
@@ -104,25 +109,41 @@ namespace KiddyTill
 
             Directory.CreateDirectory(Properties.Settings.Default.ProductsDirectory);
 
-            if (!string.IsNullOrEmpty(Properties.Settings.Default.SerialPort))
-            {
-                _scanner = new BarcodeScanner(Properties.Settings.Default.SerialPort);
-                try
-                {
-                    _scanner.Open();
-                    _scanner.BarcodeScanned += _scanner_BarcodeScanned; ;
-                }
-                catch (Exception ex)
-                {
-                    _scanner = null;
-                }
-            }
-
+            OpenScanner();
             LoadProducts();
             UpdateDisplay();
         }
 
-        private void _scanner_BarcodeScanned(string barcode)
+        private void OpenScanner()
+        {
+            CloseScanner();
+
+            if (!string.IsNullOrEmpty(Properties.Settings.Default.SerialPort))
+            {
+                try
+                {
+                    _scanner = new BarcodeScanner(Properties.Settings.Default.SerialPort);
+                    _scanner.Open();
+                    _scanner.BarcodeScanned += Scanner_BarcodeScanned;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error opening barcode scanner: " + ex.Message, "Error opening scanner", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
+
+        private void CloseScanner()
+        {
+            if (_scanner != null && _scanner.IsOpen)
+            {
+                _scanner.Close();
+                _scanner.BarcodeScanned -= Scanner_BarcodeScanned;
+                _scanner = null;
+            }
+        }
+
+        private void Scanner_BarcodeScanned(string barcode)
         {
             Dispatcher.BeginInvoke((Action)(() => { AddProductToBasket(barcode); }));
         }
@@ -195,9 +216,7 @@ namespace KiddyTill
             string path = Uri.UnescapeDataString(uri.Path);
             return Path.Combine(Path.GetDirectoryName(path), "Resources", fileName);
         }
-
-
-
+        
         private void SetProduct(BasketItem product)
         {
             if (product == null)
@@ -223,12 +242,6 @@ namespace KiddyTill
             _basket.Clear();
             SetProduct(null);
             UpdateDisplay();
-        }
-
-        private void Window_KeyUp(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.PageDown || e.Key == Key.PageUp)
-                NewSale();
         }
     }
 }
