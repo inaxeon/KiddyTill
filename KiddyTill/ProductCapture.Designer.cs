@@ -202,7 +202,6 @@
             this.Text = "ProductCapture";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.ProductCapture_FormClosed);
             this.Load += new System.EventHandler(this.ProductCapture_Load);
-            this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ProductCapture_KeyPress);
             ((System.ComponentModel.ISupportInitialize)(this.pctDisplay)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

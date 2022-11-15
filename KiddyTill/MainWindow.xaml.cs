@@ -31,8 +31,7 @@ namespace KiddyTill
         private List<Product> _products;
         private BasketItem _noProduct;
         private ObservableCollection<BasketItem> _basket;
-        private DispatcherTimer _keyTimer;
-        private List<char> _keyCodes;
+        private BarcodeScanner _scanner;
         private decimal _total;
 
         public MainWindow()
@@ -40,10 +39,6 @@ namespace KiddyTill
             InitializeComponent();
             _products = new List<Product>();
             _basket = new ObservableCollection<BasketItem>();
-            _keyTimer = new DispatcherTimer();
-            _keyTimer.Tick += new EventHandler(BarcodeScannerInputEentTimer);
-            _keyTimer.Interval = new TimeSpan(0, 0, 0, 0, 20);
-            _keyCodes = new List<char>();
             _noProduct = new BasketItem
             {
                 Product = new Product
@@ -68,26 +63,6 @@ namespace KiddyTill
             };
         }
 
-        private void Window_KeyDown(object sender, KeyEventArgs e)
-        {
-            var key = (char)KeyInterop.VirtualKeyFromKey(e.Key);
-
-            if (!(char.IsDigit(key) || char.IsLetter(key)))
-            {
-                e.Handled = false;
-                return;
-            }
-
-            _keyCodes.Add(key);
-
-            e.Handled = true;
-
-            if (_keyTimer.IsEnabled)
-                _keyTimer.Stop();
-
-            _keyTimer.Start();
-        }
-
         private void CmdOptions_Click(object sender, RoutedEventArgs e)
         {
             var optionsDialog = new Options();
@@ -100,9 +75,16 @@ namespace KiddyTill
 
         private void CmdCaptureProducts_Click(object sender, RoutedEventArgs e)
         {
-            var captureDialog = new ProductCapture(_products);
-            captureDialog.ShowDialog();
-            SaveProducts();
+            if (_scanner != null)
+            {
+                var captureDialog = new ProductCapture(_scanner, _products);
+                captureDialog.ShowDialog();
+                SaveProducts();
+            }
+            else
+            {
+                MessageBox.Show("No Barcode scanner connected", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void BtnNewSale_Click(object sender, RoutedEventArgs e)
@@ -122,8 +104,27 @@ namespace KiddyTill
 
             Directory.CreateDirectory(Properties.Settings.Default.ProductsDirectory);
 
+            if (!string.IsNullOrEmpty(Properties.Settings.Default.SerialPort))
+            {
+                _scanner = new BarcodeScanner(Properties.Settings.Default.SerialPort);
+                try
+                {
+                    _scanner.Open();
+                    _scanner.BarcodeScanned += _scanner_BarcodeScanned; ;
+                }
+                catch (Exception ex)
+                {
+                    _scanner = null;
+                }
+            }
+
             LoadProducts();
             UpdateDisplay();
+        }
+
+        private void _scanner_BarcodeScanned(string barcode)
+        {
+            Dispatcher.BeginInvoke((Action)(() => { AddProductToBasket(barcode); }));
         }
 
         private void LoadProducts()
@@ -168,18 +169,6 @@ namespace KiddyTill
 
                 product.AddedOrModified = false; // Don't serialise again
             }
-        }
-
-
-
-        private void BarcodeScannerInputEentTimer(object sender, EventArgs e)
-        {
-            ((DispatcherTimer)sender).Stop();
-
-            if (_keyCodes.Count > 1)
-                AddProductToBasket(new string(_keyCodes.ToArray()));
-
-            _keyCodes.Clear();
         }
 
         private void AddProductToBasket(string barcode)

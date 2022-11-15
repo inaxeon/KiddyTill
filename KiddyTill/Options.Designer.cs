@@ -33,12 +33,14 @@
             this.txtProductsLocation = new System.Windows.Forms.TextBox();
             this.btnClose = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
+            this.ddlBarcodeScanner = new System.Windows.Forms.ComboBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(9, 11);
+            this.label2.Location = new System.Drawing.Point(10, 66);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(92, 13);
             this.label2.TabIndex = 1;
@@ -46,7 +48,7 @@
             // 
             // btnChoseLocation
             // 
-            this.btnChoseLocation.Location = new System.Drawing.Point(11, 56);
+            this.btnChoseLocation.Location = new System.Drawing.Point(11, 111);
             this.btnChoseLocation.Name = "btnChoseLocation";
             this.btnChoseLocation.Size = new System.Drawing.Size(127, 33);
             this.btnChoseLocation.TabIndex = 1;
@@ -56,7 +58,7 @@
             // 
             // txtProductsLocation
             // 
-            this.txtProductsLocation.Location = new System.Drawing.Point(12, 30);
+            this.txtProductsLocation.Location = new System.Drawing.Point(12, 85);
             this.txtProductsLocation.Name = "txtProductsLocation";
             this.txtProductsLocation.ReadOnly = true;
             this.txtProductsLocation.Size = new System.Drawing.Size(429, 20);
@@ -82,11 +84,32 @@
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
             // 
+            // ddlBarcodeScanner
+            // 
+            this.ddlBarcodeScanner.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.ddlBarcodeScanner.FormattingEnabled = true;
+            this.ddlBarcodeScanner.Location = new System.Drawing.Point(12, 34);
+            this.ddlBarcodeScanner.Name = "ddlBarcodeScanner";
+            this.ddlBarcodeScanner.Size = new System.Drawing.Size(429, 21);
+            this.ddlBarcodeScanner.TabIndex = 4;
+            this.ddlBarcodeScanner.SelectedIndexChanged += new System.EventHandler(this.ddlBarcodeScanner_SelectedIndexChanged);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(10, 15);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(91, 13);
+            this.label1.TabIndex = 5;
+            this.label1.Text = "Barcode scanner:";
+            // 
             // Options
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(454, 281);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.ddlBarcodeScanner);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnClose);
             this.Controls.Add(this.txtProductsLocation);
@@ -111,5 +134,7 @@
         private System.Windows.Forms.TextBox txtProductsLocation;
         private System.Windows.Forms.Button btnClose;
         private System.Windows.Forms.Button btnCancel;
+        private System.Windows.Forms.ComboBox ddlBarcodeScanner;
+        private System.Windows.Forms.Label label1;
     }
 }

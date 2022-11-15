@@ -15,10 +15,9 @@ namespace KiddyTill
 {
     public partial class ProductCapture : Form
     {
+        private BarcodeScanner _scanner;
         private CameraFrameSource _frameSource;
         private static Bitmap _latestFrame;
-        private List<char> _keyCodes;
-        private Timer _keyTimer;
         private List<Product> _products;
 
         private Camera CurrentCamera
@@ -29,14 +28,11 @@ namespace KiddyTill
             }
         }
 
-        public ProductCapture(List<Product> products)
+        public ProductCapture(BarcodeScanner scanner, List<Product> products)
         {
             InitializeComponent();
-            _keyCodes = new List<char>();
-            _keyTimer = new Timer();
-            _keyTimer.Interval = 20;
-            _keyTimer.Tick += new EventHandler(TimerEventProcessor);
             _products = products;
+            _scanner = scanner;
         }
 
         private void ProductCapture_Load(object sender, EventArgs e)
@@ -57,6 +53,13 @@ namespace KiddyTill
             KeyPreview = true;
             txtProductDescription.Focus();
             StartCamera();
+
+            _scanner.BarcodeScanned += Scanner_BarcodeScanned;
+        }
+
+        private void Scanner_BarcodeScanned(string barcode)
+        {
+            throw new NotImplementedException();
         }
 
         private void btnStartCamera_Click(object sender, EventArgs e)
@@ -146,70 +149,6 @@ namespace KiddyTill
                 pctDisplay.Image = _latestFrame;
 
             btnStartCamera.Text = "Start Camera";
-        }
-
-        private void ProductCapture_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (!(char.IsDigit(e.KeyChar) || char.IsLetter(e.KeyChar)))
-            {
-                e.Handled = false;
-                return;
-            }
-
-            _keyCodes.Add(e.KeyChar);
-
-            e.Handled = true;
-
-            if (_keyTimer.Enabled)
-                _keyTimer.Stop();
-
-            _keyTimer.Start();
-        }
-
-        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
-        {
-            if (keyData == Keys.Enter)
-            {
-                if (_keyTimer.Enabled)
-                    return true; // Reading from barcode scanner
-            }
-            if (keyData == Keys.PageDown || keyData == Keys.PageUp)
-            {
-                if (_frameSource == null)
-                    StartCamera();
-                else
-                    DisposeCamera();
-
-                return true;
-            }
-
-            return base.ProcessCmdKey(ref msg, keyData);
-        }
-
-        void TimerEventProcessor(object sender, EventArgs e)
-        {
-            ((Timer)sender).Stop();
-
-            if (_keyCodes.Count == 1)
-            {
-                KeyPreview = false;
-                SendKeys.Send(_keyCodes[0].ToString());
-            }
-            else
-            {
-                SaveProduct(new string(_keyCodes.ToArray()));
-            }
-
-            _keyCodes.Clear();
-
-            Timer timer = new Timer();
-            timer.Tick += new EventHandler((object o, EventArgs s) =>
-            {
-                ((Timer)o).Stop();
-                KeyPreview = true;
-            });
-            timer.Interval = 5;
-            timer.Start();
         }
 
         private void SaveProduct(string barCode)

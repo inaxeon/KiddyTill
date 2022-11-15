@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:KiddyTill"
         mc:Ignorable="d"
-        Title="Kiddy Till" Height="450" Width="800" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen" KeyDown="Window_KeyDown" KeyUp="Window_KeyUp">
+        Title="Kiddy Till" Height="450" Width="800" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen" KeyUp="Window_KeyUp">
     <Grid>
         <Grid>
             <Grid.RowDefinitions>
