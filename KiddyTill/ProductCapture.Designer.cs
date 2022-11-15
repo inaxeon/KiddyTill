@@ -200,7 +200,7 @@
             this.MinimizeBox = false;
             this.Name = "ProductCapture";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "ProductCapture";
+            this.Text = "Product Capture";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.ProductCapture_FormClosed);
             this.Load += new System.EventHandler(this.ProductCapture_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pctDisplay)).EndInit();

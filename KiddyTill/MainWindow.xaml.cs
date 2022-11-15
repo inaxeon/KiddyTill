@@ -264,6 +264,7 @@ namespace KiddyTill
         {
             _basket.Clear();
             SetProduct(null);
+            _total = 0;
             UpdateDisplay();
         }
     }
