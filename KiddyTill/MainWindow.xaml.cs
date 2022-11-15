@@ -159,10 +159,33 @@ namespace KiddyTill
                 {
                     var product = (Product)serializer.Deserialize(myFileStream);
                     var imageFileName = Path.Combine(Path.GetDirectoryName(file), Path.GetFileNameWithoutExtension(file) + ".jpg");
-                    product.Image = new BitmapImage(new Uri(imageFileName));
+
+                    product.Image = LoadImageFromFile(imageFileName);
 
                     _products.Add(product);
                 }
+            }
+        }
+
+        private BitmapImage LoadImageFromFile(string fileName)
+        {
+            // What was once simply is apparently now rather difficult.
+            // the "new BitmapImage(new Uri(...))" appearoch works with less code but
+            // leaves the file handle open which is not very helpful.
+
+            using (var fileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read))
+            using (var memoryStream = new MemoryStream())
+            {
+                fileStream.CopyTo(memoryStream);
+                memoryStream.Position = 0;
+
+                var bitmapImage = new BitmapImage();
+                bitmapImage.BeginInit();
+                bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+                bitmapImage.StreamSource = memoryStream;
+                bitmapImage.EndInit();
+                bitmapImage.Freeze();
+                return bitmapImage;
             }
         }
 
