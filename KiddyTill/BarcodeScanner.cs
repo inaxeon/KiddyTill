@@ -45,6 +45,11 @@ namespace KiddyTill
         private void Port_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
             var code = ReadBarcode();
+
+            string invalid = new string(Path.GetInvalidFileNameChars()) + new string(Path.GetInvalidPathChars());
+            foreach (char c in invalid)
+                code = code.Replace(c.ToString(), "_");
+
             BarcodeScanned?.Invoke(code);
         }
 

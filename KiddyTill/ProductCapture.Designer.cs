@@ -85,6 +85,7 @@
             this.cmbCameras.Name = "cmbCameras";
             this.cmbCameras.Size = new System.Drawing.Size(174, 21);
             this.cmbCameras.TabIndex = 6;
+            this.cmbCameras.SelectedIndexChanged += new System.EventHandler(this.cmbCameras_SelectedIndexChanged);
             // 
             // label1
             // 

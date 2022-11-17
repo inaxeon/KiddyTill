@@ -45,7 +45,7 @@ namespace KiddyTill
                     cmbCameras.Items.Add(cam);
 
                 if (cmbCameras.Items.Count > 0)
-                    cmbCameras.SelectedIndex = 0;
+                    cmbCameras.SelectedIndex = Properties.Settings.Default.LastCameraIndex;
             }
 
             chkMirrorImage.Checked = Properties.Settings.Default.FlipCameraPreview;
@@ -80,6 +80,9 @@ namespace KiddyTill
 
         private void StartCamera()
         {
+            if (cmbCameras.Items.Count == 0)
+                return;
+
             // Early return if we've selected the current camera
             if (_frameSource != null && _frameSource.Camera == cmbCameras.SelectedItem)
                 return;
@@ -88,6 +91,7 @@ namespace KiddyTill
             _latestFrame = null;
             StartCapturing();
             btnStartCamera.Text = "Stop Camera";
+            cmbCameras.Enabled = false;
         }
 
         private void StartCapturing()
@@ -153,6 +157,7 @@ namespace KiddyTill
                 pctDisplay.Image = _latestFrame;
 
             btnStartCamera.Text = "Start Camera";
+            cmbCameras.Enabled = true;
         }
 
         private void SaveProduct(string barCode)
@@ -242,6 +247,12 @@ namespace KiddyTill
             }
 
             return base.ProcessCmdKey(ref msg, keyData);
+        }
+
+        private void cmbCameras_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.LastCameraIndex = cmbCameras.SelectedIndex;
+            Properties.Settings.Default.Save();
         }
     }
 }

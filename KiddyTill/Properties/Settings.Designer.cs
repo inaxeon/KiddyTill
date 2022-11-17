@@ -58,5 +58,17 @@ namespace KiddyTill.Properties {
                 this["SerialPort"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int LastCameraIndex {
+            get {
+                return ((int)(this["LastCameraIndex"]));
+            }
+            set {
+                this["LastCameraIndex"] = value;
+            }
+        }
     }
 }
